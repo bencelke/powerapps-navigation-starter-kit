@@ -1,0 +1,1037 @@
+# Project 01 — Premium Navigation Kit
+# COPY THE FULL FILE CONTENT. Paste as CODE on an existing blank screen.
+# Then set the screen OnVisible formula from powerfx/scrPNKDemo_OnVisible.fx.
+# Source-only starter: requires validation in your own Power Apps Studio version.
+- cntPNKRoot:
+    Control: GroupContainer@1.3.0
+    Variant: ManualLayout
+    Properties:
+      X: =0
+      Y: =0
+      Width: =Parent.Width
+      Height: =Parent.Height
+      Fill: =RGBA(245,247,251,1)
+    Children:
+    - cntPNKSidebar:
+        Control: GroupContainer@1.3.0
+        Variant: ManualLayout
+        Properties:
+          X: =0
+          Y: =0
+          Width: =If(Coalesce(varPNKCollapsed,false),76,242)
+          Height: =Parent.Height
+          Fill: =RGBA(13,30,54,1)
+        Children:
+        - cntPNKLogo:
+            Control: GroupContainer@1.3.0
+            Variant: ManualLayout
+            Properties:
+              X: =18
+              Y: =20
+              Width: =38
+              Height: =38
+              Fill: =RGBA(40,100,233,1)
+              RadiusTopLeft: =10
+              RadiusTopRight: =10
+              RadiusBottomLeft: =10
+              RadiusBottomRight: =10
+            Children:
+            - lblPNKLogo:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="N"
+                  X: =0
+                  Y: =0
+                  Width: =38
+                  Height: =38
+                  Size: =19
+                  Color: =RGBA(255,255,255,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  FontWeight: =FontWeight.Bold
+                  Align: =Align.Center
+        - lblPNKBrand:
+            Control: Label@2.5.1
+            Properties:
+              Text: ="NORTHSTAR"
+              X: =68
+              Y: =19
+              Width: =140
+              Height: =24
+              Size: =13
+              Color: =RGBA(255,255,255,1)
+              Font: =Font.'Segoe UI'
+              Wrap: =false
+              PaddingLeft: =0
+              PaddingRight: =0
+              FontWeight: =FontWeight.Bold
+              Visible: =!Coalesce(varPNKCollapsed,false)
+        - lblPNKBrandSub:
+            Control: Label@2.5.1
+            Properties:
+              Text: ="OPERATIONS SUITE"
+              X: =68
+              Y: =43
+              Width: =148
+              Height: =18
+              Size: =8
+              Color: =RGBA(154,176,206,1)
+              Font: =Font.'Segoe UI'
+              Wrap: =false
+              PaddingLeft: =0
+              PaddingRight: =0
+              Visible: =!Coalesce(varPNKCollapsed,false)
+        - btnPNKToggle:
+            Control: Classic/Button@2.2.0
+            Properties:
+              Text: =If(Coalesce(varPNKCollapsed,false), "»", "«")
+              X: =Parent.Width-46
+              Y: =78
+              Width: =34
+              Height: =31
+              Fill: =RGBA(21,43,73,1)
+              Color: =RGBA(185,203,227,1)
+              BorderThickness: =0
+              HoverFill: =RGBA(37,67,100,1)
+              PressedFill: =RGBA(22,73,185,1)
+              RadiusTopLeft: =8
+              RadiusTopRight: =8
+              RadiusBottomLeft: =8
+              RadiusBottomRight: =8
+              Font: =Font.'Segoe UI'
+              Size: =11
+              OnSelect: =Set(varPNKCollapsed, !Coalesce(varPNKCollapsed,false))
+              Tooltip: =If(Coalesce(varPNKCollapsed,false), "Expand navigation", "Collapse navigation")
+
+        - lblPNKNavCaption:
+            Control: Label@2.5.1
+            Properties:
+              Text: ="WORKSPACE"
+              X: =20
+              Y: =117
+              Width: =Parent.Width-24
+              Height: =18
+              Size: =8
+              Color: =RGBA(120,144,177,1)
+              Font: =Font.'Segoe UI'
+              Wrap: =false
+              PaddingLeft: =0
+              PaddingRight: =0
+              FontWeight: =FontWeight.Semibold
+              Visible: =!Coalesce(varPNKCollapsed,false)
+        - galPNKNavigation:
+            Control: Gallery@2.15.0
+            Variant: BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0
+            Properties:
+              X: =0
+              Y: =136
+              Width: =Parent.Width
+              Height: =312
+              Items: =Table({Page:"Overview", Symbol:"◈"}, {Page:"Projects", Symbol:"▦"}, {Page:"Assets", Symbol:"▣"}, {Page:"Analytics", Symbol:"◉"}, {Page:"Settings",
+                Symbol:"⚙"})
+              TemplateSize: =54
+              TemplatePadding: =0
+              ShowScrollbar: =false
+              DelayItemLoading: =true
+              OnSelect: =Set(varPNKPage, ThisItem.Page)
+            Children:
+            - cntPNKNavHighlight:
+                Control: GroupContainer@1.3.0
+                Variant: ManualLayout
+                Properties:
+                  X: =8
+                  Y: =3
+                  Width: =Parent.TemplateWidth-16
+                  Height: =44
+                  Fill: =If(ThisItem.Page = Coalesce(varPNKPage, "Overview"), RGBA(21,43,73,1), RGBA(255,255,255,0))
+                  RadiusTopLeft: =9
+                  RadiusTopRight: =9
+                  RadiusBottomLeft: =9
+                  RadiusBottomRight: =9
+            - lblPNKNavSymbol:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =ThisItem.Symbol
+                  X: =20
+                  Y: =8
+                  Width: =32
+                  Height: =34
+                  Size: =18
+                  Color: =RGBA(255,255,255,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  Align: =Align.Center
+                  OnSelect: =Select(Parent)
+            - lblPNKNavTitle:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =ThisItem.Page
+                  X: =62
+                  Y: =10
+                  Width: =Parent.TemplateWidth-74
+                  Height: =28
+                  Size: =11
+                  Color: =RGBA(255,255,255,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  FontWeight: =FontWeight.Semibold
+                  Visible: =!Coalesce(varPNKCollapsed,false)
+                  OnSelect: =Select(Parent)
+            - btnPNKNavHitbox:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Text: =ThisItem.Page
+                  X: =0
+                  Y: =0
+                  Width: =Parent.TemplateWidth
+                  Height: =Parent.TemplateHeight
+                  Fill: =RGBA(0,0,0,0)
+                  Color: =RGBA(255,255,255,0)
+                  BorderThickness: =0
+                  HoverFill: =RGBA(255,255,255,0.07)
+                  PressedFill: =RGBA(255,255,255,0.10)
+                  RadiusTopLeft: =9
+                  RadiusTopRight: =9
+                  RadiusBottomLeft: =9
+                  RadiusBottomRight: =9
+                  Font: =Font.'Segoe UI'
+                  Size: =11
+                  OnSelect: =Select(Parent)
+                  Tooltip: =ThisItem.Page & " navigation"
+                  HoverColor: =RGBA(255,255,255,0)
+                  PressedColor: =RGBA(255,255,255,0)
+
+        - cntPNKSideDivider:
+            Control: GroupContainer@1.3.0
+            Variant: ManualLayout
+            Properties:
+              X: =16
+              Y: =Parent.Height-136
+              Width: =Parent.Width-32
+              Height: =1
+              Fill: =RGBA(48,67,95,1)
+        - cntPNKAvatar:
+            Control: GroupContainer@1.3.0
+            Variant: ManualLayout
+            Properties:
+              X: =17
+              Y: =Parent.Height-109
+              Width: =38
+              Height: =38
+              Fill: =RGBA(44,70,104,1)
+              RadiusTopLeft: =19
+              RadiusTopRight: =19
+              RadiusBottomLeft: =19
+              RadiusBottomRight: =19
+            Children:
+            - lblPNKAvatar:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="AM"
+                  X: =0
+                  Y: =0
+                  Width: =38
+                  Height: =38
+                  Size: =11
+                  Color: =RGBA(255,255,255,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  FontWeight: =FontWeight.Semibold
+                  Align: =Align.Center
+        - lblPNKUsername:
+            Control: Label@2.5.1
+            Properties:
+              Text: ="Avery Morgan"
+              X: =66
+              Y: =Parent.Height-108
+              Width: =142
+              Height: =22
+              Size: =11
+              Color: =RGBA(255,255,255,1)
+              Font: =Font.'Segoe UI'
+              Wrap: =false
+              PaddingLeft: =0
+              PaddingRight: =0
+              FontWeight: =FontWeight.Semibold
+              Visible: =!Coalesce(varPNKCollapsed,false)
+        - lblPNKRole:
+            Control: Label@2.5.1
+            Properties:
+              Text: ="DEMO ADMIN"
+              X: =66
+              Y: =Parent.Height-85
+              Width: =124
+              Height: =17
+              Size: =8
+              Color: =RGBA(154,176,206,1)
+              Font: =Font.'Segoe UI'
+              Wrap: =false
+              PaddingLeft: =0
+              PaddingRight: =0
+              Visible: =!Coalesce(varPNKCollapsed,false)
+        - lblPNKVersion:
+            Control: Label@2.5.1
+            Properties:
+              Text: ="KIT 01  ·  v1.0"
+              X: =18
+              Y: =Parent.Height-34
+              Width: =184
+              Height: =16
+              Size: =8
+              Color: =RGBA(110,134,165,1)
+              Font: =Font.'Segoe UI'
+              Wrap: =false
+              PaddingLeft: =0
+              PaddingRight: =0
+              Visible: =!Coalesce(varPNKCollapsed,false)
+    - cntPNKWorkspace:
+        Control: GroupContainer@1.3.0
+        Variant: ManualLayout
+        Properties:
+          X: =cntPNKSidebar.Width
+          Y: =0
+          Width: =Parent.Width-cntPNKSidebar.Width
+          Height: =Parent.Height
+          Fill: =RGBA(245,247,251,1)
+        Children:
+        - cntPNKTopbar:
+            Control: GroupContainer@1.3.0
+            Variant: ManualLayout
+            Properties:
+              X: =0
+              Y: =0
+              Width: =Parent.Width
+              Height: =70
+              Fill: =RGBA(255,255,255,1)
+            Children:
+            - lblPNKBreadcrumb:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="Workspace  /"
+                  X: =20
+                  Y: =21
+                  Width: =116
+                  Height: =28
+                  Size: =10
+                  Color: =RGBA(112,129,152,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+            - lblPNKBreadcrumbCurrent:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =Coalesce(varPNKPage,"Overview")
+                  X: =125
+                  Y: =21
+                  Width: =170
+                  Height: =28
+                  Size: =10
+                  Color: =RGBA(24,40,61,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  FontWeight: =FontWeight.Semibold
+            - txtPNKSearch:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  X: =Parent.Width-344
+                  Y: =15
+                  Width: =250
+                  Height: =39
+                  Default: =""
+                  HintText: ="Search fictional records"
+                  Fill: =RGBA(248,250,253,1)
+                  Color: =RGBA(24,40,61,1)
+                  BorderColor: =RGBA(230,235,242,1)
+                  BorderThickness: =1
+                  FocusedBorderThickness: =2
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  PaddingLeft: =14
+                  Font: =Font.'Segoe UI'
+                  Size: =10
+                  DelayOutput: =true
+
+            - cntPNKTopAvatar:
+                Control: GroupContainer@1.3.0
+                Variant: ManualLayout
+                Properties:
+                  X: =Parent.Width-70
+                  Y: =17
+                  Width: =34
+                  Height: =34
+                  Fill: =RGBA(237,243,255,1)
+                  RadiusTopLeft: =17
+                  RadiusTopRight: =17
+                  RadiusBottomLeft: =17
+                  RadiusBottomRight: =17
+                Children:
+                - lblPNKTopInitials:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="AM"
+                      X: =0
+                      Y: =0
+                      Width: =34
+                      Height: =34
+                      Size: =10
+                      Color: =RGBA(40,100,233,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Semibold
+                      Align: =Align.Center
+        - lblPNKEyebrow:
+            Control: Label@2.5.1
+            Properties:
+              Text: ="WORKSPACE OVERVIEW"
+              X: =28
+              Y: =86
+              Width: =Parent.Width-56
+              Height: =20
+              Size: =8
+              Color: =RGBA(40,100,233,1)
+              Font: =Font.'Segoe UI'
+              Wrap: =false
+              PaddingLeft: =0
+              PaddingRight: =0
+              FontWeight: =FontWeight.Semibold
+        - lblPNKPageTitle:
+            Control: Label@2.5.1
+            Properties:
+              Text: =Switch(Coalesce(varPNKPage,"Overview"),"Overview","Operations overview","Projects","Project portfolio","Assets","Asset inventory","Analytics","Analytics
+                workspace","Settings","Workspace settings","Operations overview")
+              X: =28
+              Y: =106
+              Width: =Parent.Width-56
+              Height: =38
+              Size: =23
+              Color: =RGBA(24,40,61,1)
+              Font: =Font.'Segoe UI'
+              Wrap: =false
+              PaddingLeft: =0
+              PaddingRight: =0
+              FontWeight: =FontWeight.Bold
+        - lblPNKPageDesc:
+            Control: Label@2.5.1
+            Properties:
+              Text: =Switch(Coalesce(varPNKPage,"Overview"),"Overview","Your business at a glance — everything in one workspace.","Projects","Track priorities,
+                owners, and delivery milestones.","Assets","Understand availability and equipment assignments.","Analytics","Make operational decisions
+                with better visibility.","Settings","Manage workspace preferences and access reviews.","Your business at a glance.")
+              X: =28
+              Y: =146
+              Width: =Parent.Width-56
+              Height: =22
+              Size: =10
+              Color: =RGBA(112,129,152,1)
+              Font: =Font.'Segoe UI'
+              Wrap: =false
+              PaddingLeft: =0
+              PaddingRight: =0
+        - cntPNKHero:
+            Control: GroupContainer@1.3.0
+            Variant: ManualLayout
+            Properties:
+              X: =28
+              Y: =171
+              Width: =Parent.Width-56
+              Height: =133
+              Fill: =RGBA(21,43,73,1)
+              RadiusTopLeft: =14
+              RadiusTopRight: =14
+              RadiusBottomLeft: =14
+              RadiusBottomRight: =14
+            Children:
+            - lblPNKHeroEyebrow:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="NORTHSTAR  /  DEMONSTRATION"
+                  X: =24
+                  Y: =17
+                  Width: =Parent.Width-48
+                  Height: =18
+                  Size: =8
+                  Color: =RGBA(155,185,245,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  FontWeight: =FontWeight.Semibold
+            - lblPNKHeroTitle:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="Build operations that feel effortless"
+                  X: =24
+                  Y: =43
+                  Width: =Parent.Width-260
+                  Height: =36
+                  Size: =20
+                  Color: =RGBA(255,255,255,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  FontWeight: =FontWeight.Semibold
+            - lblPNKHeroDesc:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="One workspace. Clear priorities. Confident decisions."
+                  X: =24
+                  Y: =88
+                  Width: =Parent.Width-260
+                  Height: =22
+                  Size: =10
+                  Color: =RGBA(189,204,225,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+            - cntPNKHeroAccent:
+                Control: GroupContainer@1.3.0
+                Variant: ManualLayout
+                Properties:
+                  X: =Parent.Width-148
+                  Y: =20
+                  Width: =94
+                  Height: =94
+                  Fill: =RGBA(36,78,145,1)
+                  RadiusTopLeft: =47
+                  RadiusTopRight: =47
+                  RadiusBottomLeft: =47
+                  RadiusBottomRight: =47
+                Children:
+                - lblPNKHeroAccent:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="◈"
+                      X: =0
+                      Y: =0
+                      Width: =94
+                      Height: =94
+                      Size: =34
+                      Color: =RGBA(167,197,255,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Semibold
+                      Align: =Align.Center
+        - cntPNKKpis:
+            Control: GroupContainer@1.3.0
+            Variant: ManualLayout
+            Properties:
+              X: =28
+              Y: =322
+              Width: =Parent.Width-56
+              Height: =122
+              Fill: =RGBA(0,0,0,0)
+            Children:
+            - cntPNNKpiProjects:
+                Control: GroupContainer@1.3.0
+                Variant: ManualLayout
+                Properties:
+                  X: =0
+                  Y: =0
+                  Width: =(Parent.Width-42)/4
+                  Height: =120
+                  Fill: =RGBA(255,255,255,1)
+                  BorderColor: =RGBA(230,235,242,1)
+                  BorderThickness: =1
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                Children:
+                - lblPNKProjectsEyebrow:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="ACTIVE PROJECTS"
+                      X: =16
+                      Y: =16
+                      Width: =Parent.Width-32
+                      Height: =18
+                      Size: =8
+                      Color: =RGBA(112,129,152,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Semibold
+                - lblPNKProjectsMetric:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: =Text(CountIf(colPNKWorkItems, Section="Projects" && Status<>"Done"),"0")
+                      X: =16
+                      Y: =37
+                      Width: =Parent.Width-32
+                      Height: =42
+                      Size: =26
+                      Color: =RGBA(24,40,61,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Bold
+                - lblPNKProjectsDesc:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="From fictional sample data"
+                      X: =16
+                      Y: =91
+                      Width: =Parent.Width-32
+                      Height: =18
+                      Size: =9
+                      Color: =RGBA(112,129,152,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+            - cntPNNKpiAssets:
+                Control: GroupContainer@1.3.0
+                Variant: ManualLayout
+                Properties:
+                  X: =1*( (Parent.Width-42)/4 + 14 )
+                  Y: =0
+                  Width: =(Parent.Width-42)/4
+                  Height: =120
+                  Fill: =RGBA(255,255,255,1)
+                  BorderColor: =RGBA(230,235,242,1)
+                  BorderThickness: =1
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                Children:
+                - lblPNKAssetsEyebrow:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="TRACKED ASSETS"
+                      X: =16
+                      Y: =16
+                      Width: =Parent.Width-32
+                      Height: =18
+                      Size: =8
+                      Color: =RGBA(112,129,152,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Semibold
+                - lblPNKAssetsMetric:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: =Text(CountIf(colPNKWorkItems, Section="Assets"),"0")
+                      X: =16
+                      Y: =37
+                      Width: =Parent.Width-32
+                      Height: =42
+                      Size: =26
+                      Color: =RGBA(24,40,61,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Bold
+                - lblPNKAssetsDesc:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="Physical equipment records"
+                      X: =16
+                      Y: =91
+                      Width: =Parent.Width-32
+                      Height: =18
+                      Size: =9
+                      Color: =RGBA(112,129,152,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+            - cntPNNKpiRisks:
+                Control: GroupContainer@1.3.0
+                Variant: ManualLayout
+                Properties:
+                  X: =2*( (Parent.Width-42)/4 + 14 )
+                  Y: =0
+                  Width: =(Parent.Width-42)/4
+                  Height: =120
+                  Fill: =RGBA(255,255,255,1)
+                  BorderColor: =RGBA(230,235,242,1)
+                  BorderThickness: =1
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                Children:
+                - lblPNKRisksEyebrow:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="AT RISK"
+                      X: =16
+                      Y: =16
+                      Width: =Parent.Width-32
+                      Height: =18
+                      Size: =8
+                      Color: =RGBA(112,129,152,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Semibold
+                - lblPNKRisksMetric:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: =Text(CountIf(colPNKWorkItems, Status="At risk"),"0")
+                      X: =16
+                      Y: =37
+                      Width: =Parent.Width-32
+                      Height: =42
+                      Size: =26
+                      Color: =RGBA(24,40,61,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Bold
+                - lblPNKRisksDesc:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="Needs attention"
+                      X: =16
+                      Y: =91
+                      Width: =Parent.Width-32
+                      Height: =18
+                      Size: =9
+                      Color: =RGBA(112,129,152,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+            - cntPNNKpiComplete:
+                Control: GroupContainer@1.3.0
+                Variant: ManualLayout
+                Properties:
+                  X: =3*( (Parent.Width-42)/4 + 14 )
+                  Y: =0
+                  Width: =(Parent.Width-42)/4
+                  Height: =120
+                  Fill: =RGBA(255,255,255,1)
+                  BorderColor: =RGBA(230,235,242,1)
+                  BorderThickness: =1
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                Children:
+                - lblPNKCompleteEyebrow:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="COMPLETED"
+                      X: =16
+                      Y: =16
+                      Width: =Parent.Width-32
+                      Height: =18
+                      Size: =8
+                      Color: =RGBA(112,129,152,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Semibold
+                - lblPNKCompleteMetric:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: =Text(CountIf(colPNKWorkItems, Status="Done"),"0")
+                      X: =16
+                      Y: =37
+                      Width: =Parent.Width-32
+                      Height: =42
+                      Size: =26
+                      Color: =RGBA(24,40,61,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Bold
+                - lblPNKCompleteDesc:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="Across all workspaces"
+                      X: =16
+                      Y: =91
+                      Width: =Parent.Width-32
+                      Height: =18
+                      Size: =9
+                      Color: =RGBA(112,129,152,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+        - lblPNKSectionLabel:
+            Control: Label@2.5.1
+            Properties:
+              Text: ="WORKSPACE ACTIVITY"
+              X: =28
+              Y: =456
+              Width: =Parent.Width-56
+              Height: =20
+              Size: =9
+              Color: =RGBA(112,129,152,1)
+              Font: =Font.'Segoe UI'
+              Wrap: =false
+              PaddingLeft: =0
+              PaddingRight: =0
+              FontWeight: =FontWeight.Semibold
+        - cntPNKWorkPanel:
+            Control: GroupContainer@1.3.0
+            Variant: ManualLayout
+            Properties:
+              X: =28
+              Y: =484
+              Width: =Parent.Width-358
+              Height: =Max(220,Parent.Height-506)
+              Fill: =RGBA(255,255,255,1)
+              BorderColor: =RGBA(230,235,242,1)
+              BorderThickness: =1
+              RadiusTopLeft: =12
+              RadiusTopRight: =12
+              RadiusBottomLeft: =12
+              RadiusBottomRight: =12
+            Children:
+            - lblPNKTableTitle:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =If(Coalesce(varPNKPage,"Overview")="Overview","Recent records",varPNKPage & " records")
+                  X: =16
+                  Y: =12
+                  Width: =Parent.Width-150
+                  Height: =30
+                  Size: =13
+                  Color: =RGBA(24,40,61,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  FontWeight: =FontWeight.Semibold
+            - lblPNKRowCount:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =Text(CountRows(galPNKRecords.AllItems)) & " visible"
+                  X: =Parent.Width-134
+                  Y: =18
+                  Width: =112
+                  Height: =24
+                  Size: =9
+                  Color: =RGBA(112,129,152,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  Align: =Align.Right
+            - cntPNKTableLine:
+                Control: GroupContainer@1.3.0
+                Variant: ManualLayout
+                Properties:
+                  X: =0
+                  Y: =57
+                  Width: =Parent.Width
+                  Height: =1
+                  Fill: =RGBA(230,235,242,1)
+            - galPNKRecords:
+                Control: Gallery@2.15.0
+                Variant: BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0
+                Properties:
+                  X: =0
+                  Y: =59
+                  Width: =Parent.Width
+                  Height: =Parent.Height-59
+                  Items: |-
+                    =With(
+                        {p: Coalesce(varPNKPage,"Overview"), q: Lower(Trim(txtPNKSearch.Text))},
+                        SortByColumns(
+                            Filter(
+                                colPNKWorkItems,
+                                (p="Overview" || Section=p) &&
+                                (IsBlank(q) || q in Lower(ItemTitle) || q in Lower(Owner))
+                            ),
+                            "ID", SortOrder.Ascending
+                        )
+                    )
+                  TemplateSize: =55
+                  TemplatePadding: =0
+                  ShowScrollbar: =true
+                  DelayItemLoading: =true
+
+                Children:
+                - cntPNKRowDivider:
+                    Control: GroupContainer@1.3.0
+                    Variant: ManualLayout
+                    Properties:
+                      X: =0
+                      Y: =Parent.TemplateHeight-1
+                      Width: =Parent.TemplateWidth
+                      Height: =1
+                      Fill: =RGBA(237,240,244,1)
+                - lblPNKRowTitle:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: =ThisItem.ItemTitle
+                      X: =14
+                      Y: =6
+                      Width: =Parent.TemplateWidth*0.49
+                      Height: =24
+                      Size: =10
+                      Color: =RGBA(24,40,61,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Semibold
+                - lblPNKRowSub:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: '=ThisItem.Section & "  ·  #" & Text(ThisItem.ID)'
+                      X: =14
+                      Y: =28
+                      Width: =Parent.TemplateWidth*0.50
+                      Height: =19
+                      Size: =8
+                      Color: =RGBA(112,129,152,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                - lblPNKRowOwner:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: =ThisItem.Owner
+                      X: =Parent.TemplateWidth*0.53
+                      Y: =14
+                      Width: =Parent.TemplateWidth*0.26
+                      Height: =25
+                      Size: =10
+                      Color: =RGBA(112,129,152,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                - cntPNKStatusPill:
+                    Control: GroupContainer@1.3.0
+                    Variant: ManualLayout
+                    Properties:
+                      X: =Parent.TemplateWidth-124
+                      Y: =12
+                      Width: =110
+                      Height: =29
+                      Fill: =Switch(ThisItem.Status,"Done",RGBA(223,248,240,1),"Available",RGBA(223,248,240,1),"At risk",RGBA(255,232,229,1),"Checked out",RGBA(255,242,216,1),RGBA(231,238,252,1))
+                      RadiusBottomLeft: =14
+                      RadiusBottomRight: =14
+                      RadiusTopLeft: =14
+                      RadiusTopRight: =14
+                    Children:
+                    - lblPNKStatus:
+                        Control: Label@2.5.1
+                        Properties:
+                          Text: =ThisItem.Status
+                          X: =0
+                          Y: =0
+                          Width: =110
+                          Height: =29
+                          Size: =9
+                          Color: =Switch(ThisItem.Status,"Done",RGBA(18,120,91,1),"Available",RGBA(18,120,91,1),"At risk",RGBA(176,49,42,1),"Checked out",RGBA(143,95,17,1),RGBA(31,87,166,1))
+                          Font: =Font.'Segoe UI'
+                          Wrap: =false
+                          PaddingLeft: =0
+                          PaddingRight: =0
+                          FontWeight: =FontWeight.Semibold
+                          Align: =Align.Center
+        - cntPNKNotes:
+            Control: GroupContainer@1.3.0
+            Variant: ManualLayout
+            Properties:
+              X: =Parent.Width-306
+              Y: =484
+              Width: =278
+              Height: =Max(220,Parent.Height-506)
+              Fill: =RGBA(255,255,255,1)
+              BorderColor: =RGBA(230,235,242,1)
+              BorderThickness: =1
+              RadiusTopLeft: =12
+              RadiusTopRight: =12
+              RadiusBottomLeft: =12
+              RadiusBottomRight: =12
+            Children:
+            - lblPNKNotesTitle:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="Developer notes"
+                  X: =18
+                  Y: =17
+                  Width: =235
+                  Height: =26
+                  Size: =13
+                  Color: =RGBA(24,40,61,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =false
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  FontWeight: =FontWeight.Semibold
+            - cntPNKNoteBadge:
+                Control: GroupContainer@1.3.0
+                Variant: ManualLayout
+                Properties:
+                  X: =18
+                  Y: =52
+                  Width: =118
+                  Height: =26
+                  Fill: =RGBA(231,248,241,1)
+                  RadiusTopLeft: =13
+                  RadiusTopRight: =13
+                  RadiusBottomLeft: =13
+                  RadiusBottomRight: =13
+                Children:
+                - lblPNKNoteBadge:
+                    Control: Label@2.5.1
+                    Properties:
+                      Text: ="●  OFFLINE DEMO"
+                      X: =0
+                      Y: =0
+                      Width: =118
+                      Height: =26
+                      Size: =8
+                      Color: =RGBA(8,123,91,1)
+                      Font: =Font.'Segoe UI'
+                      Wrap: =false
+                      PaddingLeft: =0
+                      PaddingRight: =0
+                      FontWeight: =FontWeight.Semibold
+                      Align: =Align.Center
+            - lblPNKNoteBody:
+                Control: Label@2.5.1
+                Properties:
+                  Text: = "No external connectors are used." & Char(10) & Char(10) & "Every record is fictional and initialized in Screen.OnVisible." &
+                    Char(10) & Char(10) & "Customize labels, colors, or replace the collection with your own data source."
+                  X: =18
+                  Y: =92
+                  Width: =241
+                  Height: =146
+                  Size: =10
+                  Color: =RGBA(112,129,152,1)
+                  Font: =Font.'Segoe UI'
+                  Wrap: =true
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  AutoHeight: =false
+                  VerticalAlign: =VerticalAlign.Top
